@@ -18,7 +18,15 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+if (app.Environment.IsDevelopment() || true) // Temporarily show errors in all environments
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 // Add database initialization code
 using (var scope = app.Services.CreateScope())
 {
