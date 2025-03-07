@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Select Dates";
+}
+
+<h1>Step 3: Select Travel Dates</h1>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5>Choose your travel dates</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="SelectHotels" method="get">
+                    <input type="hidden" name="countryId" value="@ViewBag.CountryId" />
+                    <input type="hidden" name="selectedAttractions" value="@ViewBag.SelectedAttractions" />
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" class="form-control" required
+                               min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" class="form-control" required
+                               min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary" id="nextButton">Next: Select Hotel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Update the minimum end date when the start date changes
+            $('#startDate').change(function () {
+                var startDate = new Date($(this).val());
+                startDate.setDate(startDate.getDate() + 1);
+                var minEndDate = startDate.toISOString().split('T')[0];
+                $('#endDate').attr('min', minEndDate);
+
+                // Reset end date if it's before the new minimum
+                if ($('#endDate').val() && new Date($('#endDate').val()) < startDate) {
+                    $('#endDate').val(minEndDate);
+                }
+            });
+        });
+    </script>
+}

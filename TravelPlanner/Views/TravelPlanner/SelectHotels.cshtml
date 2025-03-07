@@ -1,0 +1,168 @@
+﻿@model IEnumerable<TravelPlanner.Models.Hotel>
+
+@{
+    ViewData["Title"] = "Select Hotel";
+    var startDate = (DateTime)ViewBag.StartDate;
+    var endDate = (DateTime)ViewBag.EndDate;
+    var numberOfNights = (endDate - startDate).Days;
+}
+
+<h1>Step 4: Select a Hotel</h1>
+
+<div class="alert alert-info">
+    <p>
+        <strong>Trip Details:</strong><br />
+        Dates: @startDate.ToShortDateString() to @endDate.ToShortDateString() (@numberOfNights nights)
+    </p>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filter Options</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Star Rating:</label>
+                    <select id="starFilter" class="form-control">
+                        <option value="0">All Ratings</option>
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sort By:</label>
+                    <select id="sortBy" class="form-control">
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="stars-desc">Stars: High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="CompleteBooking" method="post">
+    <input type="hidden" name="countryId" value="@ViewBag.CountryId" />
+    <input type="hidden" name="selectedAttractions" value="@ViewBag.SelectedAttractions" />
+    <input type="hidden" name="startDate" value="@startDate.ToString("yyyy-MM-dd")" />
+    <input type="hidden" name="endDate" value="@endDate.ToString("yyyy-MM-dd")" />
+
+    <div class="row" id="hotelContainer">
+        @foreach (var hotel in Model)
+        {
+            <div class="col-md-4 mb-4 hotel-card" data-stars="@hotel.Stars" data-price="@hotel.Price">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@hotel.Name</h5>
+                        <p class="card-text">
+                            <strong>Location:</strong> @hotel.City.Name (Near @hotel.Attraction.Name)<br />
+                            <strong>Rating:</strong>
+                            @for (int i = 0; i < hotel.Stars; i++)
+                            {
+                                <span class="text-warning">★</span>
+                            }
+                            <br />
+                            <strong>Price per night:</strong> @hotel.Price.ToString("C")<br />
+                            <strong>Total for @numberOfNights nights:</strong> @((hotel.Price * numberOfNights).ToString("C"))
+                        </p>
+                        <p>
+                            <strong>Address:</strong> @hotel.Address<br />
+                            <strong>Contact:</strong> @hotel.Contact
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-check">
+                            <input class="form-check-input hotel-radio" type="radio" name="hotelId" value="@hotel.HotelId" id="hotel-@hotel.HotelId">
+                            <label class="form-check-label" for="hotel-@hotel.HotelId">
+                                Select this hotel
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-3 mb-5">
+        <button type="submit" class="btn btn-success btn-lg" id="completeButton" disabled>Complete Booking</button>
+
+        <!-- Add form for booking without a hotel -->
+        <form asp-action="CompleteBooking" method="post" class="d-inline">
+            <input type="hidden" name="countryId" value="@ViewBag.CountryId" />
+            <input type="hidden" name="selectedAttractions" value="@ViewBag.SelectedAttractions" />
+            <input type="hidden" name="startDate" value="@startDate.ToString("yyyy-MM-dd")" />
+            <input type="hidden" name="endDate" value="@endDate.ToString("yyyy-MM-dd")" />
+            <input type="hidden" name="hotelId" value="" />
+            <button type="submit" class="btn btn-outline-primary btn-lg ml-2">Skip Hotel Selection</button>
+        </form>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Enable/disable the Complete button based on selection
+            $('.hotel-radio').change(function () {
+                $('#completeButton').prop('disabled', false);
+            });
+
+            // Filter by star rating
+            $('#starFilter').change(function () {
+                filterHotels();
+            });
+
+            // Sort hotels
+            $('#sortBy').change(function () {
+                sortHotels();
+            });
+
+            function filterHotels() {
+                var stars = parseInt($('#starFilter').val());
+
+                $('.hotel-card').each(function () {
+                    var hotelStars = parseInt($(this).data('stars'));
+
+                    if (stars === 0 || hotelStars === stars) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+
+                // Re-sort after filtering
+                sortHotels();
+            }
+
+            function sortHotels() {
+                var sortOption = $('#sortBy').val();
+                var $hotels = $('.hotel-card').toArray();
+
+                $hotels.sort(function(a, b) {
+                    var $a = $(a);
+                    var $b = $(b);
+
+                    if (sortOption === 'price-asc') {
+                        return parseFloat($a.data('price')) - parseFloat($b.data('price'));
+                    } else if (sortOption === 'price-desc') {
+                        return parseFloat($b.data('price')) - parseFloat($a.data('price'));
+                    } else if (sortOption === 'stars-desc') {
+                        return parseInt($b.data('stars')) - parseInt($a.data('stars'));
+                    }
+                });
+
+                var $container = $('#hotelContainer');
+                $container.empty();
+
+                $.each($hotels, function(i, hotel) {
+                    $container.append(hotel);
+                });
+            }
+        });
+    </script>
+}

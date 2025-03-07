@@ -1,0 +1,122 @@
+﻿@model IEnumerable<TravelPlanner.Models.Attraction>
+
+@{
+    ViewData["Title"] = "Select Attractions";
+}
+
+<h1>Step 2: Select Attractions in @ViewBag.Country.Name</h1>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filter Options</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>City:</label>
+                    <select id="cityFilter" class="form-control">
+                        <option value="">All Cities</option>
+                        @foreach (var city in ViewBag.Cities)
+                        {
+                            <option value="@city.CityId">@city.Name @(city.IsCapital ? "(Capital)" : "")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Type:</label>
+                    <select id="typeFilter" class="form-control">
+                        <option value="">All Types</option>
+                        @foreach (var type in Model.Select(a => a.Type).Distinct())
+                        {
+                            <option value="@type">@type</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-action="SelectDates" method="get">
+    <input type="hidden" name="countryId" value="@ViewBag.Country.CountryId" />
+    <div class="row">
+        @foreach (var attraction in Model)
+        {
+            <div class="col-md-4 mb-4 attraction-card" data-city="@attraction.CityId" data-type="@attraction.Type">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@attraction.Name</h5>
+                        <p class="card-text">
+                            <strong>City:</strong> @attraction.City.Name<br />
+                            <strong>Type:</strong> @attraction.Type<br />
+                            <strong>Rating:</strong> @attraction.Rating/5<br />
+                            <strong>Budget:</strong> @attraction.BudgetLevel
+                        </p>
+                        <p class="card-text">@attraction.Description</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="form-check">
+                            <input class="form-check-input attraction-checkbox" type="checkbox" name="selectedAttractions" value="@attraction.AttractionId" id="attraction-@attraction.AttractionId">
+                            <label class="form-check-label" for="attraction-@attraction.AttractionId">
+                                Select this attraction
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="text-center mt-3 mb-5">
+        <button type="submit" class="btn btn-primary btn-lg" id="nextButton" disabled>Next: Select Dates</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Enable/disable the Next button based on selections
+            $('.attraction-checkbox').change(function () {
+                if ($('.attraction-checkbox:checked').length > 0) {
+                    $('#nextButton').prop('disabled', false);
+                } else {
+                    $('#nextButton').prop('disabled', true);
+                }
+            });
+
+            // Filter by city
+            $('#cityFilter').change(function () {
+                filterAttractions();
+            });
+
+            // Filter by type
+            $('#typeFilter').change(function () {
+                filterAttractions();
+            });
+
+            function filterAttractions() {
+                var cityId = $('#cityFilter').val();
+                var type = $('#typeFilter').val();
+
+                $('.attraction-card').each(function () {
+                    var show = true;
+
+                    if (cityId && $(this).data('city') != cityId) {
+                        show = false;
+                    }
+
+                    if (type && $(this).data('type') != type) {
+                        show = false;
+                    }
+
+                    if (show) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+    </script>
+}

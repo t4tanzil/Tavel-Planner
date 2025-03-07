@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TravelPlanner.Models.Country>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1 class="display-4">Plan Your Perfect Trip</h1>
+    <p class="lead">Discover amazing destinations, attractions, and accommodations all in one place.</p>
+    <hr class="my-4">
+    <p>Start planning your next adventure in just a few clicks.</p>
+    <a class="btn btn-primary btn-lg" asp-controller="TravelPlanner" asp-action="SelectCountry" role="button">Start Planning</a>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Featured Destinations</h2>
+        <hr />
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var country in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@country.Name</h5>
+                    <p class="card-text">
+                        <strong>Region:</strong> @country.Region<br />
+                        <strong>Currency:</strong> @country.Currency<br />
+                        <strong>Language:</strong> @country.Language
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="TravelPlanner" asp-action="SelectAttractions" asp-route-countryId="@country.CountryId" class="btn btn-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

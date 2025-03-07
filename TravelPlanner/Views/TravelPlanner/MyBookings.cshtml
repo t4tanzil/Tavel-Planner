@@ -1,0 +1,115 @@
+﻿@model IEnumerable<TravelPlanner.Models.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+
+    // Group bookings by unique trip (same country, hotel, start and end date)
+    var trips = Model.GroupBy(b => new { b.CountryId, b.HotelId, b.StartDate, b.EndDate })
+        .Select(g => new
+        {
+            BookingGroup = g.ToList(),
+            FirstBooking = g.First(),
+            TotalPrice = g.Sum(b => b.TotalPrice)
+        })
+        .OrderByDescending(g => g.FirstBooking.StartDate)
+        .ToList();
+}
+
+<h1>My Bookings</h1>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        You don't have any bookings yet. <a asp-controller="TravelPlanner" asp-action="SelectCountry">Plan a trip</a> to get started!
+    </div>
+}
+else
+{
+    <div class="accordion" id="bookingsAccordion">
+        @for (int i = 0; i < trips.Count; i++)
+        {
+            var trip = trips[i];
+            var bookingDate = trip.FirstBooking.StartDate.ToShortDateString();
+            var returnDate = trip.FirstBooking.EndDate.ToShortDateString();
+            var tripId = $"trip{i}";
+
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white" id="heading@(tripId)">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link text-white" type="button"
+                                onclick="toggleCollapse('@tripId')">
+                            Trip to @trip.FirstBooking.Country.Name (@bookingDate - @returnDate)
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapse@(tripId)" class="collapse @(i == 0 ? "show" : "")">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Trip Details</h5>
+                                <p>
+                                    <strong>Destination:</strong> @trip.FirstBooking.Country.Name<br />
+                                    <strong>Dates:</strong> @bookingDate to @returnDate<br />
+                                    <strong>Duration:</strong> @((trip.FirstBooking.EndDate - trip.FirstBooking.StartDate).Days) nights<br />
+                                    @if (trip.FirstBooking.Hotel != null)
+                                    {
+                                        <strong>Hotel:</strong> @trip.FirstBooking.Hotel.Name
+
+                                        <br />
+                                    }
+                                    else
+                                    {
+                                        <strong>Hotel:</strong> <span>No hotel selected</span>
+
+                                        <br />
+                                    }
+                                    <strong>Total Price:</strong> @trip.TotalPrice.ToString("C")
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Planned Attractions</h5>
+                                <ul>
+                                    @foreach (var booking in trip.BookingGroup)
+                                    {
+                                        <li>
+                                            @if (booking.Attraction != null)
+                                            {
+                                                @booking.Attraction.Name
+
+                                                @if (booking.Attraction.City != null)
+                                                {
+                                                    <text>(@booking.Attraction.City.Name)</text>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <text>Unknown Attraction</text>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function toggleCollapse(id) {
+            const collapseElement = document.getElementById('collapse' + id);
+            if (collapseElement) {
+                // Toggle the 'show' class
+                if (collapseElement.classList.contains('show')) {
+                    collapseElement.classList.remove('show');
+                } else {
+                    collapseElement.classList.add('show');
+                }
+            }
+        }
+    </script>
+}

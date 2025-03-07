@@ -1,0 +1,74 @@
+﻿@model IEnumerable<TravelPlanner.Models.Booking>
+
+@{
+    ViewData["Title"] = "Booking Confirmation";
+    var booking = Model.FirstOrDefault(); // Get the first booking
+}
+
+<!-- Check if there are any bookings -->
+@if (booking != null)
+{
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h2>Booking Confirmed!</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Trip Details</h4>
+                    <p>
+                        <strong>Destination:</strong> @booking.Country.Name<br />
+                        <strong>Dates:</strong> @booking.StartDate.ToShortDateString() to @booking.EndDate.ToShortDateString()<br />
+                        <strong>Duration:</strong> @((booking.EndDate - booking.StartDate).Days) nights<br />
+                        <strong>Hotel:</strong>
+                        @if (booking.Hotel != null)
+                        {
+                            @booking.Hotel.Name
+                        }
+                        else
+                        {
+                            <span>No hotel selected</span>
+                        }
+                        <br />
+                        <strong>Total Price:</strong> @booking.TotalPrice.ToString("C")
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Selected Attractions</h4>
+                    <ul>
+                        @foreach (var item in Model)
+                        {
+                            <li>
+                                @if (item.Attraction != null)
+                                {
+                                    @item.Attraction.Name
+
+                                    @if (item.Attraction.City != null)
+                                    {
+                                        <text>(@item.Attraction.City.Name)</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>Unknown Attraction</text>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="text-center">
+                <a asp-action="MyBookings" class="btn btn-primary">View All My Bookings</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Return to Home</a>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        No booking information available.
+    </div>
+}

@@ -1,0 +1,116 @@
+﻿@model IEnumerable<TravelPlanner.Models.Country>
+
+@{
+    ViewData["Title"] = "Select Country";
+}
+
+<h1>Step 1: Select a Country</h1>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Filter Options</h5>
+            </div>
+            <div class="card-body">
+                <form asp-controller="TravelPlanner" asp-action="SelectCountry" method="get">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Region:</label>
+                                <select name="region" class="form-control">
+                                    <option value="">All Regions</option>
+                                    @foreach (var region in ViewBag.Regions)
+                                    {
+                                        if (region == ViewBag.SelectedRegion)
+                                        {
+                                            <option value="@region" selected>@region</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@region">@region</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Currency:</label>
+                                <select name="currency" class="form-control">
+                                    <option value="">All Currencies</option>
+                                    @foreach (var currency in ViewBag.Currencies)
+                                    {
+                                        if (currency == ViewBag.SelectedCurrency)
+                                        {
+                                            <option value="@currency" selected>@currency</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@currency">@currency</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Language:</label>
+                                <select name="language" class="form-control">
+                                    <option value="">All Languages</option>
+                                    @foreach (var language in ViewBag.Languages)
+                                    {
+                                        if (language == ViewBag.SelectedLanguage)
+                                        {
+                                            <option value="@language" selected>@language</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@language">@language</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <a asp-controller="TravelPlanner" asp-action="SelectCountry" class="btn btn-secondary">Clear Filters</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model.Any())
+    {
+        @foreach (var country in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@country.Name</h5>
+                        <p class="card-text">
+                            <strong>Region:</strong> @country.Region<br />
+                            <strong>Currency:</strong> @country.Currency<br />
+                            <strong>Language:</strong> @country.Language
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-controller="TravelPlanner" asp-action="SelectAttractions" asp-route-countryId="@country.CountryId" class="btn btn-primary">Select</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                No countries match your filter criteria. Please try different filters.
+            </div>
+        </div>
+    }
+</div>
