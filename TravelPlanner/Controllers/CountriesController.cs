@@ -20,10 +20,7 @@ namespace TravelPlanner.Controllers
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-            var countries = await _context.Countries
-                // Add OrderBy for A-Z sorting
-                .OrderBy(c => c.Name)  
-                .ToListAsync();
+            var countries = await _context.Countries.OrderBy(c => c.Name).ThenBy(c=> c.Region).ToListAsync();
             return View(countries);
         }
 
