@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 }
 @section Styles {
-    @* <link rel="stylesheet" href="~/css/tableSortable.css" /> *@
     <link rel="stylesheet" href="~/css/datatables.min.css" />
 }
 <h1>Attractions</h1>
@@ -73,25 +72,25 @@
     </tbody>
 </table>
 
-@* Section for page-specific JavaScript *@
 @section Scripts {
     <script>
         $(document).ready(function() {
             $('.table').DataTable({
                 "columnDefs": [
                     {
-                        "type": "num-fmt",  // Use num-fmt to correctly sort decimals
-                        "targets": [2]      // Price column (index 3) will be treated as numeric
+                        "type": "num-fmt",
+                        "targets": [2]
                     },
                     {
-                        "type": "num-fmt",  
-                        "targets": [3]      
+                        "type": "num-fmt",
+                        "targets": [3]
                     },
                     {
-                        "orderable": true, 
-                        "targets": "_all"// MatureContent column is the 3rd column (index 2)
+                        "orderable": true,
+                        "targets": "_all"
                     }
                 ]
             });
         });
     </script>
+} 
