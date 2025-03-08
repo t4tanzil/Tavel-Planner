@@ -8,6 +8,8 @@
     <title>@ViewData["Title"] - Travel Planner</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)<!--this will render addtional style-->
+
 </head>
 <body>
     <header>
