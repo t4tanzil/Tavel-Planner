@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@section Styles {
+    <!-- Include DataTables CSS for table sorting and filtering -->
+    <link rel="stylesheet" href="~/css/datatables.min.css" />
+}
 <h1>Hotels</h1>
 
 <p>
@@ -69,3 +72,26 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "columnDefs": [
+                    {
+                        "type": "num-fmt",  // Use num-fmt for price column
+                        "targets": [3]      // Assuming price is the 4th column
+                    },
+                    {
+                        "type": "num-fmt",  // Use num-fmt for rating column
+                        "targets": [2]      // Assuming rating is the 3rd column
+                    },
+                    {
+                        "orderable": true,
+                        "targets": "_all"   // Make all columns sortable
+                    }
+                ]
+            });
+        });
+    </script>
+} 
