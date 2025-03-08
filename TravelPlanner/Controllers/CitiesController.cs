@@ -23,9 +23,7 @@ namespace TravelPlanner.Controllers
         {
             var cities = await _context.Cities
                 //Add OrderBy for A-Z sorting
-                .OrderBy(c => c.Name) 
-                .Include(c => c.Country)
-                .ToListAsync();
+                .OrderBy(c => c.Name).ThenBy(c=> c.Region) .Include(c => c.Country).ToListAsync();
             return View(cities);
         }
 
