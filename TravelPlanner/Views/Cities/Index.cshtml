@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@section Styles {
+    <!-- Include DataTables CSS for table sorting and filtering -->
+    <link rel="stylesheet" href="~/css/datatables.min.css" />
+}
 <h1>Cities</h1>
 
 <p>
@@ -45,3 +48,18 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "columnDefs": [
+                    {
+                        "orderable": true,
+                        "targets": "_all"  // Make all columns sortable
+                    }
+                ]
+            });
+        });
+    </script>
+} 
