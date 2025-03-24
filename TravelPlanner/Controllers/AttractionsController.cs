@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
+    [Authorize(Roles = "Administrator")]
+
     public class AttractionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -17,6 +20,7 @@ namespace TravelPlanner.Controllers
         {
             _context = context;
         }
+        [AllowAnonymous]
 
         // GET: Attractions
         public async Task<IActionResult> Index()
@@ -28,6 +32,7 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Attractions/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +51,7 @@ namespace TravelPlanner.Controllers
 
             return View(attraction);
         }
-
+        [Authorize]
         // GET: Attractions/Create
         public IActionResult Create()
         {
@@ -74,7 +79,7 @@ namespace TravelPlanner.Controllers
                 return View(attraction);
             }
         }
-
+        [Authorize]
         // GET: Attractions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -117,7 +122,6 @@ namespace TravelPlanner.Controllers
                 return View(attraction);
             }
         }
-
         // GET: Attractions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

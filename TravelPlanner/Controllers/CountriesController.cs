@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TravelPlanner.Data;
@@ -8,6 +9,7 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class CountriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +27,7 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Countries/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,6 +46,7 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Countries/Create
+        
         public IActionResult Create()
         {
             return View();

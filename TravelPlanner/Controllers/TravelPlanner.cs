@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,8 +10,10 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
+    [Authorize]
     public class TravelPlannerController : Controller
     {
+        
         private readonly ApplicationDbContext _context;
 
         public TravelPlannerController(ApplicationDbContext context)
@@ -196,7 +199,7 @@ namespace TravelPlanner.Controllers
 
             return View(bookings);
         }
-
+        
         // View all user bookings
         public async Task<IActionResult> MyBookings(int userId = 1) // Default user ID for now
         {
