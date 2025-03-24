@@ -22,6 +22,8 @@ namespace TravelPlanner.Controllers
         public async Task<IActionResult> Index()
         {
             var hotels = await _context.Hotels
+                //Add OrderBy for A-Z sorting
+                .OrderBy(c => c.Name) 
                 .Include(h => h.Attraction)
                 .Include(h => h.City)
                 .ToListAsync();

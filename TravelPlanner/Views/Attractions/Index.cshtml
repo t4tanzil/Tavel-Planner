@@ -3,8 +3,10 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/datatables.min.css" />
+}
+<h1>Attractions</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -69,3 +71,26 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "columnDefs": [
+                    {
+                        "type": "num-fmt",
+                        "targets": [2]
+                    },
+                    {
+                        "type": "num-fmt",
+                        "targets": [3]
+                    },
+                    {
+                        "orderable": true,
+                        "targets": "_all"
+                    }
+                ]
+            });
+        });
+    </script>
+} 
