@@ -28,19 +28,28 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="TravelPlanner" asp-action="SelectCountry">Plan a Trip</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
+                        @if ((User.Identity.IsAuthenticated) )
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="TravelPlanner" asp-action="MyBookings">My Bookings</a>
                             </li>
                         }
 
-                            
-                            <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                            }
+                            else
+                            {
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="allListDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     View All List
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="allListDropdown">
+                                
+                            }
+                            <div class="dropdown-menu" aria-labelledby="adminDropdown">
                                     <a class="dropdown-item" asp-controller="Countries" asp-action="Index">Countries</a>
                                     <a class="dropdown-item" asp-controller="Cities" asp-action="Index">Cities</a>
                                     <a class="dropdown-item" asp-controller="Attractions" asp-action="Index">Attractions</a>
@@ -49,22 +58,6 @@
                                 </div>
                             </li>
                         
-                        @if (User.IsInRole("Administrator"))
-                        {
-                            
-                        <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Admin
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="adminDropdown">
-                                    <a class="dropdown-item" asp-controller="Countries" asp-action="Index">Countries</a>
-                                    <a class="dropdown-item" asp-controller="Cities" asp-action="Index">Cities</a>
-                                    <a class="dropdown-item" asp-controller="Attractions" asp-action="Index">Attractions</a>
-                                    <a class="dropdown-item" asp-controller="Hotels" asp-action="Index">Hotels</a>
-                                    <a class="dropdown-item" asp-controller="Bookings" asp-action="Index">Bookings</a>
-                                </div>
-                            </li>
-                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
