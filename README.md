@@ -14,7 +14,8 @@
       Add, edit, and delete attractions. 
       Add, edit, and delete hotels. 
       Manage bookings.
-10.It has Facebook, Google Authentication and Create edit delete details are now have access roles and features for admins and users
+   
+10.It has Facebook, Google Authentication and Create edit delete details are now have access roles and features for admins and users.
    
 This travel planner application provides a complete end-to-end solution for planning trips with proper database relationships, cascading deletes for maintaining data integrity, and a responsive user interface.
 
