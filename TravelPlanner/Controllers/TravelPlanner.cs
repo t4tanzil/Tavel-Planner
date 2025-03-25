@@ -10,7 +10,7 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
-    [Authorize]
+    
     public class TravelPlannerController : Controller
     {
         
@@ -80,7 +80,7 @@ namespace TravelPlanner.Controllers
 
             return View(attractions);
         }
-
+        [Authorize]
         // Step 3: Select dates
         public IActionResult SelectDates(int countryId, string selectedAttractions)
         {
@@ -109,7 +109,7 @@ namespace TravelPlanner.Controllers
 
             return View(hotels);
         }
-
+        [Authorize]
         // Complete booking
         [HttpPost]
         public async Task<IActionResult> CompleteBooking(int countryId, string selectedAttractions,

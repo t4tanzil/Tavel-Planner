@@ -10,7 +10,8 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    // [Authorize(Roles = "Administrator")]
+    [Authorize]
     public class CitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,7 +20,7 @@ namespace TravelPlanner.Controllers
         {
             _context = context;
         }
-
+        [AllowAnonymous]
         // GET: Cities
         public async Task<IActionResult> Index()
         {
@@ -32,7 +33,7 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Cities/Details/5
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,7 +51,7 @@ namespace TravelPlanner.Controllers
 
             return View(city);
         }
-
+        [Authorize]
         // GET: Cities/Create
         public IActionResult Create()
         {
@@ -76,7 +77,7 @@ namespace TravelPlanner.Controllers
                 return View(city);
             }
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Cities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -117,7 +118,7 @@ namespace TravelPlanner.Controllers
                 return View(city);
             }
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Cities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

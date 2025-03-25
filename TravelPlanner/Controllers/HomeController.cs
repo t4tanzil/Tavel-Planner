@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using TravelPlanner.Data;
 using TravelPlanner.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TravelPlanner.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

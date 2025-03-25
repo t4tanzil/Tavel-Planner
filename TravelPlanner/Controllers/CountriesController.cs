@@ -9,7 +9,8 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
+    
     public class CountriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -18,7 +19,7 @@ namespace TravelPlanner.Controllers
         {
             _context = context;
         }
-
+        [AllowAnonymous]
         // GET: Countries
         public async Task<IActionResult> Index()
         {
@@ -27,7 +28,7 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Countries/Details/5
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,12 +47,12 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Countries/Create
-        
+        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
-
+        
         // POST: Countries/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -69,7 +70,7 @@ namespace TravelPlanner.Controllers
                 return View(country);
             }
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Countries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -108,7 +109,7 @@ namespace TravelPlanner.Controllers
                 return View(country);
             }
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: Countries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

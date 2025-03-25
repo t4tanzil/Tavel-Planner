@@ -10,8 +10,8 @@ using TravelPlanner.Models;
 
 namespace TravelPlanner.Controllers
 {
-    [Authorize(Roles = "Administrator")]
-
+    //[Authorize(Roles = "Administrator")]
+    [Authorize]
     public class AttractionsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -32,7 +32,7 @@ namespace TravelPlanner.Controllers
         }
 
         // GET: Attractions/Details/5
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -79,7 +79,7 @@ namespace TravelPlanner.Controllers
                 return View(attraction);
             }
         }
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         // GET: Attractions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -122,6 +122,7 @@ namespace TravelPlanner.Controllers
                 return View(attraction);
             }
         }
+        [Authorize(Roles = "Administrator")]
         // GET: Attractions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

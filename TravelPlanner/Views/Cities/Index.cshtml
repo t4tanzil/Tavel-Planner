@@ -4,8 +4,8 @@
     ViewData["Title"] = "Index";
 }
 @section Styles {
-    <!-- Include DataTables CSS for table sorting and filtering -->
-    <link rel="stylesheet" href="~/css/datatables.min.css" />
+<!-- Include DataTables CSS for table sorting and filtering -->
+<link rel="stylesheet" href="~/css/datatables.min.css" />
 }
 <h1>Cities</h1>
 
@@ -28,23 +28,32 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCapital)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CityId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CityId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CityId">Delete</a>
-            </td>
-        </tr>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsCapital)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country.Name)
+                </td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.CityId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.CityId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.CityId">Delete</a>
+                    </td>
+                }
+                else
+                {
+					<td>
+						<a asp-action="Details" asp-route-id="@item.CityId">Details</a>
+					</td>
+				}
+            </tr>
 }
     </tbody>
 </table>
