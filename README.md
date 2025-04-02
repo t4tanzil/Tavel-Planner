@@ -27,7 +27,7 @@ User Credentials-
 user@gc.ca
 User@000
 
-teacher Chedentials-
+Professor Chedentials-
 dario@gc.ca
 Test123$
 
