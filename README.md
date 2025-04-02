@@ -1,4 +1,4 @@
-# Tavel-Planner (https://travel-planner-fyb6ctbma4ehdqhr.canadacentral-01.azurewebsites.net/)
+# Tavel-Planner (https://travelplanner-csbtb8haeje9g7gk.canadacentral-01.azurewebsites.net/)
 # Summary of the Travel Planner Application Features
 1. Browse and filter countries by region, currency, and language
 2. Select a country and view its attractions
