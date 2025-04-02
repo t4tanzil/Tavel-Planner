@@ -9,7 +9,7 @@
             [Key]
             public int BookingId { get; set; }
 
-            public int UserId { get; set; }
+            public String UserId { get; set; }
 
             [ForeignKey("Country")]
             public int CountryId { get; set; }

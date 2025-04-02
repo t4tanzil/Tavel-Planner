@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TravelPlanner.Data;
 using TravelPlanner.Models;
@@ -116,7 +117,7 @@ namespace TravelPlanner.Controllers
             DateTime startDate, DateTime endDate, int? hotelId)
         {
             // For simplicity, we'll use a fixed user ID
-            int userId = 1;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             // Parse attraction IDs
             var attractionIds = selectedAttractions.Split(',').Select(int.Parse).ToList();
@@ -186,10 +187,11 @@ namespace TravelPlanner.Controllers
         }
 
         // Booking confirmation
-        public async Task<IActionResult> BookingConfirmation(int userId)
+        public async Task<IActionResult> BookingConfirmation()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var bookings = await _context.Bookings
-                .Where(b => b.UserId == userId)
+                .Where(b => b.UserId == userId.ToString())
                 .Include(b => b.Country)
                 .Include(b => b.Attraction)
                 .ThenInclude(a => a.City)
@@ -201,8 +203,9 @@ namespace TravelPlanner.Controllers
         }
         
         // View all user bookings
-        public async Task<IActionResult> MyBookings(int userId = 1) // Default user ID for now
+        public async Task<IActionResult> MyBookings() // Default user ID for now
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var bookings = await _context.Bookings
                 .Where(b => b.UserId == userId)
                 .Include(b => b.Country)
