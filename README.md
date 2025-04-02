@@ -9,7 +9,7 @@
 7. View booking confirmation
 8. View all past bookings
 9. Manage data through admin interfaces: Add, edit, and delete countries, cities, attractions, hotels. Manage bookings
-10.It has Facebook, Google Authentication and Create edit delete details are now have access roles and features for admins and users
+10. It has Facebook, Google Authentication and Create edit delete details are now have access roles and features for admins and users
 11.anyone without log in can view the list on countries,attractions,cities,hotels log in user can view details and list and also create new countries,attractions,cities,hotels Administrator accese can do everything Edit delete create and View details
    
 This travel planner application provides a complete end-to-end solution for planning trips with proper database relationships, cascading deletes for maintaining data integrity, and a responsive user interface.
